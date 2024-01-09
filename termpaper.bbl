@@ -1,0 +1,44 @@
+\begin{thebibliography}{1}
+
+\bibitem{gtsam}
+F.~Dellaert et~al.
+\newblock {GTSAM} - georgia tech smoothing and mapping.
+\newblock \url{https://gtsam.org/}.
+\newblock Accessed: December 28, 2023.
+
+\bibitem{Forster_2017}
+Christian Forster, Luca Carlone, Frank Dellaert, and Davide Scaramuzza.
+\newblock On-manifold preintegration for real-time visual--inertial odometry.
+\newblock {\em IEEE Transactions on Robotics}, 33(1):1–21, February 2017.
+
+\bibitem{dbow2}
+Dorian G\'alvez-L\'opez and J.~D. Tard\'os.
+\newblock Bags of binary words for fast place recognition in image sequences.
+\newblock {\em IEEE Transactions on Robotics}, 28(5):1188--1197, October 2012.
+
+\bibitem{lucas1981iterative}
+Bruce~D Lucas and Takeo Kanade.
+\newblock An iterative image registration technique with an application to stereo vision.
+\newblock In {\em IJCAI'81: 7th international joint conference on Artificial intelligence}, volume~2, pages 674--679, 1981.
+
+\bibitem{preint_lupton}
+Todd Lupton and Salah Sukkarieh.
+\newblock Visual-inertial-aided navigation for high-dynamic motion in built environments without initial conditions.
+\newblock {\em IEEE Transactions on Robotics}, 28(1):61--76, 2012.
+
+\bibitem{rosinol2020kimera}
+Antoni Rosinol, Marcus Abate, Yun Chang, and Luca Carlone.
+\newblock Kimera: an open-source library for real-time metric-semantic localization and mapping, 2020.
+
+\bibitem{marchingCubesImage}
+Ryoshoru.
+\newblock Marching cubes cases.
+\newblock % \url{https://de.wikipedia.org/wiki/Datei:MarchingCubesEdit.svg#globalusage}.
+\newblock Accessed: January 2,2024.
+
+\bibitem{Shi_tomasi}
+Jianbo Shi and Tomasi.
+\newblock Good features to track.
+\newblock In {\em 1994 Proceedings of IEEE Conference on Computer Vision and Pattern Recognition}, pages 593--600, 1994.
+
+\end{thebibliography}
