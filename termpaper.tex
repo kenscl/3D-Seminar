@@ -115,11 +115,6 @@ Kimera is build from four independent modules:
 \end{itemize}
 Each module works independent from the other modules. This allows the user to replace the Modules as they see fit. 
 Due to Kimeras Lightweight design, being able to run on only a CPU, each module is not only able to run  offline using a previously generated dataset, but also able to run online on a real time system using the Robot operating system (ROS).
-\paragraph{The sequence of events} begins with Kimera-VIO. 
-It estimates the state of the robot using mono/stereo Images and the IMU and runs at IMU rate. 
-This state-estimate is then used by Kimera-Mesher alongside the stereo images from the camera to build the per-frame and multi-frame 3D meshes.
-The per-frame mesh is generated at every frame made by the stereo camera, and then added to the multi-frame 3D mesh.
-----------------------------------------------todo
 
 
 \subsection{Kimera-VIO}
@@ -198,15 +193,22 @@ It relies on the following steps\footnote{This explanation is overly simplified 
            \end{bmatrix}
         \end{align*}
 \end{enumerate}
-\subsubsection{Overview} \label{Sec:K-VIO overview}
 The vector $[u,v]^T$ describes the movement of the picture.
+\subsubsection{Smoothing based state estimation} \label{Pre:Smoothing}
+There are exist two main smoothing approaches in the field of VIO, Fixed-Lag and full smoothing.
+In Full smoothing all recorded optimizes all state-measurements, while Fixed-Lag smoothing marginalizes out all states and only considers those in a certain time frame.
+The general Approach is otherwise similar: It begins with estimating the state in the relevant Time frame.
+The optimisation is done by comparing the measured IMU and visual data with a state prediction by using a cost function. 
+The goal of the optimisation is to minimize this cost function at all points in time to get a trajectory that best fits reality.
+\subsubsection{Overview} \label{Sec:K-VIO overview}
 The Kimera visual inertial odometry (VIO) module outputs state estimates of the robot.
 As an input it needs both stereo camera input and IMU data. 
-To achieve this Kimera uses a modified version of the On-Manifold Preintegration algorithm presented in \cite{Forster_2017} which computes a maximum a posteriori estimeate in real time. 
+To achieve this Kimera uses a modified version of the On-Manifold Preintegration algorithm presented in \cite{Forster_2017} which computes a maximum a posteriori estimate in real time. 
 This paper improves on the runtime constraints of usual VIO approaches by preintigrating the inertial measurements between keyframes into a single motion. 
 This means that certain quantities will be computed between keyframes reducing the amount of variables that need to be optimized. 
-Kimera expands on this to use both monocular and stereo cameras instead of only monocular cameras and also to allow both full lag and fixed lag smoothing, though fixed lag smoothing is used preferentially to limit the time the algorithm takes.
+Kimera expands on this to use both monocular and stereo cameras instead of only monocular cameras and also to allow both full lag and fixed lag smoothing (see sec.~\ref{Pre:Smoothing}), though fixed lag smoothing is used preferentially to limit the time the algorithm takes.
 Fixed lag smoothing means that only measurements in a certain time window are smoothed over to estimate the state, while full lag smoothing estimates the state over all measurements.
+
 \paragraph{}
 Kimera-VIO is split into two parts: \textit{(i)} The front-end and \textit{(ii)} the back-end. 
 The front end is responsible for feature tracking, preintigration of measurements and state estimation, while the back-end is responsible for improving the state estimation. 
@@ -229,11 +231,11 @@ Kimera performs this geometric verification on both monocular vision using 5-poi
 Kimera also offers the ability to verify the IMU data using mono and stereo verification using 2 and 1-point RANSAC respectively.
 
 \paragraph{\textit{(ii)} The back-end}
-uses the preintegrated IMU and a structureless \footnote{In this context structureless means that the Positions of landmarks (tracked features) are ignored by the fixed lag smoother} visual model similar to \cite{Forster_2017} and adds them to a fixed lag smoother. 
+uses the preintegrated IMU and a structureless \footnote{In this context structureless means that the Positions of landmarks (tracked features) are ignored by the fixed lag smoother} visual model similar to \cite{Forster_2017} and adds them to a fixed lag smoother, in this case iSAM2. 
 This generates a factor graph. It uses iSAM2 implemented in the GTSAM library to solve the factor graph. 
 iSAM2 is a incremental soothing technique which uses factor graphs to reduce the number of variables full smoothing approaches inherently have to compute. 
-At each iSAM2 iteration the points of structureless vision model are estimated using DLT 
-
+After each iSAM2 computation produces the newly refined state estimate the per-frame mesh is build.
+This is done by the use of a direct linear trandformation
 \subsection{Kimera-Mesher}
 Sec.\ref{pre:delaunay} to \ref{Sec:Lucas-Kanade} are meant to explain important topics to Kimera-VIO.
 Sec.\ref{Sec:K-VIO overview} explains the inner workings of Kimera-VIO.
@@ -361,7 +363,9 @@ This is due to Kimera-Mesher using the calculated pose of the VIO back-end to up
 The third and fourth thread run Kimera-RPGO and Kimera-Semantics respectively. 
 
 \subsection{Results}
-The authors of Kimera compared their approach to 5 other open source VIO piplines: OKVIS, MSCKF, ROVIO, VINS-Mono, and SVO-GTSAM.
+The authors of Kimera tested the modules of Kimera independently from one another. 
+All tests were done on either measured real world datasets or done in a simulator.
+The authors of Kimera compared their VIO approach to 5 other open source VIO piplines: OKVIS, MSCKF, ROVIO, VINS-Mono, and SVO-GTSAM.
 They tested these pipelines on 11 different datasets.
 Among these approaches four (OKVIS, MSCKF, ROVIO, VINS-Mono) implement fixed lag smoothing. 
 SVO-GTSAM allows for full-lag smoothing and VINS-LC for Loop closure detection. 
@@ -370,8 +374,22 @@ On the reaming two datasets Kimera measured second best.
 In full smoothing Kimera outperformed GTSAM 6 times while being tied twice. 
 It is also notable that GTSAM failed completely three times while Kimera was able to run all tests.
 In PGO Kimera outperformed VINS-LC 9 out of 11 times. 
-todo
-
+It is also Notable that Kimera-VIO incurs a small drift of below 0.2 $\%$ in longer trajectories. 
+The authors also measured the impact of the tunable parameter of Kimera-RPGO and found that it only impacts the performance of Kimera by a negligible amount when using PCM.
+They measured a RMSE of 0.05 m at a $\alpha$ of 10 and a RMSE of 0.49 m at a $\alpha$ of 0.001, when using. 
+Without the use of PCM the error increases to a maximum of 1.59 m at a $\alpha$ of 0.001. 
+To evaluate the performance of Kimera-Mesher testing on six sequences in the EuRoC V1 and V2 datasets was done. 
+The performance of both the Multi-frame mesh as well as the global mesh was determined. 
+The Multi-frame mesh hat a RMSE of 0.374 m and 0.530 m, while the error of the Global mesh was between 0.353 m and 0.480 m.
+The Global Mesh outperformed the Mult-frame mesh in four out of the six tests, ranging from 12 \% to 24 \% lower RMSE.
+In the cases where the multi-frame mesh was more accurate the difference was less than 3 \%.
+(todo mayby completness?)
+The testing of Kimera-Semantics was done using a unity based simulator. 
+The authors noticed small geometric and semantic errors with bundled raycasting, while dense stereo introduces notable errors, especially in texture-less areas like walls. 
+Using ground truth depth and pose information provided by the simulator a semantic accuracy of 94.68 \% was achieved, with a geometric RMSE of 0.079 m.
+The impact of the use of Kimera-Vio is mainly visible in the 3D mesh with its RMSE increasing to 0.131 m, while the semantic accuracy remains at 94.50 \%. 
+The use of Dense stereo instead of ground truth depth sees both measures worsen to a semantic accuracy of 80.74 \% and a RMSE of 0.215 m.
+It should be noted that the RMSE of the metric-semantic mesh of 0.215 m is still much smaller than the best case Kimera-Mesher RMSE of 0.353 m.
 
 
 \section{Review}
@@ -382,6 +400,9 @@ todo
 \end{figure}
 
 \section{Conclusion}
+Kimera presents a c++ Library for metric-semantic Visual-Inertial Simultaneous Localization And Mapping that is modular and able to perform in a low performance environment, allowing further research and developments in several distinct field, ranging from (todo).
+Kimeras Modules generally performe well, with the combination of Kimera-VIO and Kimera-RPGO outperforming similar state of the art libraries.
+Kimera-Meshers mesh is build quickly and allows for low level navigation tasks, while Kimera-Semantics builds an accurate metric-semantic mesh.
 
 
 {\small                   % use small if you need it
