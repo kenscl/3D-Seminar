@@ -237,14 +237,14 @@ iSAM2 is a incremental soothing technique which uses factor graphs to reduce the
 After each iSAM2 computation produces the newly refined state estimate the per-frame mesh is build.
 This is done by the use of a direct linear trandformation
 \subsection{Kimera-Mesher}
-Sec.\ref{pre:delaunay} to \ref{Sec:Lucas-Kanade} are meant to explain important topics to Kimera-VIO.
-Sec.\ref{Sec:K-VIO overview} explains the inner workings of Kimera-VIO.
+Sec.\ref{pre:delaunay} to ? are meant to explain important topics to Kimera-VIO.
+Sec.\ref{Sec:K-Mesher overview} explains the inner workings of Kimera-VIO.
 \subsubsection{Delaunay Triangulation} \label{pre:delaunay}
 This is a method for triangulating a number of points. This means that a mesh gets generated that connects the points.
 This is done by drawing ovals of the points. 
 These ovals are chosen in such a manner that every circle has exactly three points\footnote{This only applies in 2D in higher dimensional spaces this number can be bigger} within its shape. 
 These three points are then connected.  
-\subsubsection{Overview}
+\subsubsection{Overview} \label{Sec:K-Mesher overview}
 The Kimera-Mesher produces two kinds of 3D mesh: \textit{(i)} a per-frame mesh and \textit{(ii)} a multi-frame mesh. The per-frame mesh is generated every frame from the stereo camera input, while the multi-frame mesh is generated from the per-frame mesh.
 Kimera-Mesher also has optional 2D fast local metric-semantic reconstruction to texture the mesh produced by the per-frame mesher.
 \paragraph{\textit{(i)} The per-frame mesh}
@@ -266,13 +266,16 @@ This leads to objects which have moved being removed from the data.
 Incremental Consistent Measurement Set Maximization is a  method of detecting loop closures in multi robot SLAM applications. 
 
 It takes a set of putative loop closures as input and tries to filter out all inconsistent loop closures. 
-This is done by selecting pairwise sets of measurements and finding the largest subset of measurements between them.
+This is done by finding pairs of measurements that are with each other i.e. finding multiple measurements that seem probable. 
+A maximum subset of these consistent measurements is then selected as the proper trajectory.
 This is efficiently solved by converting the problem into a Maximum Clique problem over a consistency graph. 
 A Maximum Clique problem looks for the largest subset of vertices where all vertices have edges between them. 
 A consistency graph is defined as a graph where each vertex represents a measurement and each edge denotes a consistency.
 In this context consistency refers to how similar two measurements are.
 \subsubsection {Overview}
 Kimera-RPGO is split between two parts: \textit{(i)} a loop closure detection algorithm and \textit{(ii)} a Pose Graph optimisation module that calculates a globally consistent pose.
+
+\subsubsection{Gauß-Newton}
 
 \paragraph{\textit{(i)} Loop closure detection}
 is the detection of areas that the robot has previously visited.
