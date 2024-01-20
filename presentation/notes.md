@@ -65,7 +65,29 @@ and 2. by compering the current loop closure to previous ones.
 - This is then projected onto the 3D point estimations of the Backend 
 - usually ment for low level tasks like obstacle avoidance
 ## Multiframe mesh
-- The vertecies of the per frame mesh not in the multiframe mesh are added to the mesh
-- The positions of all vertecies are then updated with new VIO positions
+- The vertices of the per frame mesh not in the multiframe mesh are added to the mesh
+- The positions of all vertices are then updated with new VIO positions
 - Vertices that fall out of the VIO time horizon are marginalized out
-- If plare surfaces are detected regularity factors get added to smooth out the mesh
+- If planar surfaces are detected regularity factors get added to smooth out the mesh
+
+# Kimera-Semantics 
+- Builds a global 3D mesh as well as semantic annotation
+## Global mesh
+- Uses stereo images from the Camera and semi-global matching to build 3D-Point cloud
+- bundled ray casting is then applied using voxblox at each keyframe and produces a TSDF
+- a mesh is then extracted using marching cubes
+## Semantics 
+- use of 2D semantically labeled images that have to be provided by the user. 
+- Kimera semantics attaches a label to each point produced by dense stereo and then propagates them during bundled ray casting (voxblox)
+- during bundled ray casting a vector of label probabilities is constructed and the propagated along TSDF distance 
+- Bayesian updates are used during bundle propagation
+- the label is the assigned during marching cubes from the most probable label 
+
+# Brief overview again 
+
+# Performance 
+
+# My experience with Kimera 
+
+# Kimera live demonstration 
+
