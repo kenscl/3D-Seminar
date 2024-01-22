@@ -39,9 +39,12 @@
 - geometric verification using RANSAC
 
 ### Vision-Backend
-- Use of fixed lag smoothing to estimate the position
-- in our case the fixed lag smoother is a factor graph consisting of IMU and visual measurements that gets solved using iSAM2
-- todo
+- Use of fixed lag smoothing to estimate the pose
+- This is done by adding the visual measurements and preintegrated IMU data to a factor graph
+- the visual measurements are structureless model (to spare computation)
+- this factor graph is then solved using iSAM2 (todo)
+- The positions of the 3D features then get estimated by using DLT and the corresponding points removed from the factor graph
+- finally degenerate points are removed and points outside the smoothing horizon marginalized
 # Kimera-RPGO
 - Detects loop closures and solves them using Pose graph optimisations
 ## Detection
@@ -86,6 +89,13 @@ and 2. by compering the current loop closure to previous ones.
 # Brief overview again 
 
 # Performance 
+## Pose estimation 
+- Testing against 5 open source VIO pipelines: OKVIS, MSCKF,
+ROVIO, VINS-Mono, and SVO-GTSAM
+- Best in Fixed lag smoothing in 8/11 tests 
+- best in full smoothing in 6/11 times while tied twice (SVO-GTSAM failed completely three times)
+- best in Loop closure detection in 9/11 cases 
+- Kimera-RPGO is insensitive to parameter tuning 
 
 # My experience with Kimera 
 
