@@ -32,9 +32,6 @@ Metric-Semantic Localization and Mapping}
 \frame[plain]{\titlepage}
 
 \begin{frame}
-\frametitle{}
-\end{frame}
-\begin{frame}
 \frametitle{What does Kimera do?}
 Three main Functions: 
 \begin{itemize}
@@ -42,6 +39,20 @@ Three main Functions:
     \item 3D mesh reconstruction
     \item semantic mesh annotation
 \end{itemize}
+\end{frame}
+\begin{frame}
+    \frametitle{Pose estimation and mesh reconstruction} 
+    \begin{figure}[ht]
+        \centering
+        \animategraphics[width=\linewidth,autoplay,loop]{12}{kimera_VIO_gif/kimeravio_ROS_mesh-}{0}{256}
+    \end{figure}
+\end{frame}
+\begin{frame}
+\frametitle{Metric semantic mesh construction}
+    \begin{figure}[ht]
+        \centering
+        \animategraphics[width=\textwidth,autoplay,loop]{20}{kimera_semantics_gif/kimera_semantics-}{0}{387}
+    \end{figure}
 \end{frame}
 \begin{frame}
 \frametitle{The structure of Kimera}
@@ -82,13 +93,6 @@ Kimera is split into four parts:
                I_t (q_1) \\I_t (q_2) \\  ...\\I_t (q_n) 
            \end{bmatrix} 
 \end{align*}
-\end{frame}
-\begin{frame}
-    \frametitle{Kimera-VIO} 
-    \begin{figure}[ht]
-        \centering
-        \animategraphics[width=\linewidth,autoplay,loop]{12}{kimera_VIO_gif/kimeravio_ROS_mesh-}{0}{256}
-    \end{figure}
 \end{frame}
 \begin{frame}
 \frametitle{The structure of Kimera}
