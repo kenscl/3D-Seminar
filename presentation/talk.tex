@@ -67,6 +67,24 @@ Kimera is split into four parts:
 \end{frame}
 \begin{frame}
     \frametitle{Kimera-VIO} 
+\begin{align*}
+    E(u,v) = \sum_{x} \sum_y w(x,y) [I(x+u,y+v)- I(x,y)]^2  
+\end{align*}
+\begin{align*}
+           \begin{bmatrix}
+               I_x (q_1) & I_x (q_1) \\ I_x (q_2) & I_x (q_2) \\  ... & ... \\I_x (q_n) & I_x (q_n)
+           \end{bmatrix} 
+           \begin{bmatrix}
+               u \\ v
+           \end{bmatrix} 
+           = - 
+           \begin{bmatrix}
+               I_t (q_1) \\I_t (q_2) \\  ...\\I_t (q_n) 
+           \end{bmatrix} 
+\end{align*}
+\end{frame}
+\begin{frame}
+    \frametitle{Kimera-VIO} 
     \begin{figure}[ht]
         \centering
         \animategraphics[width=\linewidth,autoplay,loop]{12}{kimera_VIO_gif/kimeravio_ROS_mesh-}{0}{256}
