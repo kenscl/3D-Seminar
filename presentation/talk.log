@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2024.1.19)  23 JAN 2024 19:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2024.1.19)  24 JAN 2024 19:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -5911,15 +5911,15 @@ Package pdftex.def Info: kimera_chart_RPGO.jpeg  used on input line 108.
  [10
 
  <./kimera_chart_RPGO.jpeg>]
-<screenshot_2024-01-20-182926.png, id=3537, 1233.60875pt x 899.36pt>
+<screenshot_2024-01-20-182926.png, id=3537, 1228.59pt x 296.10625pt>
 File: screenshot_2024-01-20-182926.png Graphic file (type png)
 <use screenshot_2024-01-20-182926.png>
 Package pdftex.def Info: screenshot_2024-01-20-182926.png  used on input line 1
 16.
-(pdftex.def)             Requested size: 245.83282pt x 179.22382pt.
+(pdftex.def)             Requested size: 245.83282pt x 59.2473pt.
  [11
 
- <./screenshot_2024-01-20-182926.png (PNG copy)>]
+ <./screenshot_2024-01-20-182926.png>]
 File: kimera_chart_23.jpeg Graphic file (type jpg)
 <use kimera_chart_23.jpeg>
 Package pdftex.def Info: kimera_chart_23.jpeg  used on input line 122.
@@ -5954,8 +5954,7 @@ File: kiemra_mesher_gif/kimeravio_release-1.png Graphic file (type png)
 Package pdftex.def Info: kiemra_mesher_gif/kimeravio_release-1.png  used on inp
 ut line 142.
 (pdftex.def)             Requested size: 602.24852pt x 339.26666pt.
- <./kiemra_mesher_gif/kimeravio_release-1.png>
-<a2,fr1>
+ <./kiemra_mesher_gif/kimeravio_release-1.png> <a2,fr1>
 <kiemra_mesher_gif/kimeravio_release-2.png, id=3632, 602.25pt x 339.2675pt>
 File: kiemra_mesher_gif/kimeravio_release-2.png Graphic file (type png)
 <use kiemra_mesher_gif/kimeravio_release-2.png>
@@ -5976,7 +5975,8 @@ File: kiemra_mesher_gif/kimeravio_release-4.png Graphic file (type png)
 Package pdftex.def Info: kiemra_mesher_gif/kimeravio_release-4.png  used on inp
 ut line 142.
 (pdftex.def)             Requested size: 602.24852pt x 339.26666pt.
- <./kiemra_mesher_gif/kimeravio_release-4.png> <a2,fr4>
+ <./kiemra_mesher_gif/kimeravio_release-4.png>
+<a2,fr4>
 <kiemra_mesher_gif/kimeravio_release-5.png, id=3644, 602.25pt x 339.2675pt>
 File: kiemra_mesher_gif/kimeravio_release-5.png Graphic file (type png)
 <use kiemra_mesher_gif/kimeravio_release-5.png>
@@ -7913,7 +7913,23 @@ Package pdftex.def Info: kimera_chart_23.jpeg  used on input line 178.
  [19
 
 ]
-(./talk.bbl) [20
+<screenshot_2024-01-24-191126.png, id=5493, 407.5225pt x 285.065pt>
+File: screenshot_2024-01-24-191126.png Graphic file (type png)
+<use screenshot_2024-01-24-191126.png>
+Package pdftex.def Info: screenshot_2024-01-24-191126.png  used on input line 1
+93.
+(pdftex.def)             Requested size: 150.57372pt x 105.32886pt.
+<screenshot_2024-01-24-191114.png, id=5494, 303.1325pt x 283.0575pt>
+File: screenshot_2024-01-24-191114.png Graphic file (type png)
+<use screenshot_2024-01-24-191114.png>
+Package pdftex.def Info: screenshot_2024-01-24-191114.png  used on input line 1
+93.
+(pdftex.def)             Requested size: 150.57372pt x 140.6041pt.
+
+[20
+
+ <./screenshot_2024-01-24-191126.png (PNG copy)> <./screenshot_2024-01-24-19111
+4.png (PNG copy)>] (./talk.bbl) [21
 
  </usr/share/texmf-dist/tex/latex/beamer/beamericonarticle.pdf>]
 \tf@nav=\write6
@@ -7930,10 +7946,10 @@ Package rerunfilecheck Info: File `talk.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 37652 strings out of 477932
- 1010323 string characters out of 5837865
+ 37670 strings out of 477932
+ 1010868 string characters out of 5837865
  1865388 words of memory out of 5000000
- 56417 multiletter control sequences out of 15000+600000
+ 56431 multiletter control sequences out of 15000+600000
  520005 words of font info for 59 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  128i,15n,122p,402b,756s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -7947,10 +7963,10 @@ dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb></usr/share/texmf-dist/fonts/typ
 e1/public/amsfonts/cm/cmssi9.pfb></usr/share/texmf-dist/fonts/type1/public/amsf
 onts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/m
 sam10.pfb>
-Output written on talk.pdf (20 pages, 60317937 bytes).
+Output written on talk.pdf (21 pages, 60135758 bytes).
 PDF statistics:
- 5587 PDF objects out of 6186 (max. 8388607)
- 2772 compressed objects within 28 object streams
- 44 named destinations out of 1000 (max. 500000)
- 10068 words of extra memory for PDF output out of 12000 (max. 10000000)
+ 5615 PDF objects out of 6186 (max. 8388607)
+ 2797 compressed objects within 28 object streams
+ 46 named destinations out of 1000 (max. 500000)
+ 10078 words of extra memory for PDF output out of 12000 (max. 10000000)
 

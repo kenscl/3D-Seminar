@@ -96,6 +96,14 @@ ROVIO, VINS-Mono, and SVO-GTSAM
 - best in full smoothing in 6/11 times while tied twice (SVO-GTSAM failed completely three times)
 - best in Loop closure detection in 9/11 cases 
 - Kimera-RPGO is insensitive to parameter tuning 
+## Mesh generation
+- Kimera Semantics outperforms mseher in terms of accuracy by 12 - 24 %, in four out of the six tests while loosing marginally in the rest 
+- Semantics in genneral has a lower RMSE of 0.35 to 0.48 m while mesher had a RMSE of 0.37 to 0.53 m
+
+## Semantics
+- ground trouth accuracy of 96% and RMSE of 0.13m
+- with Kimera VIO and ground trouth depth accuracy drops to 80% and RMSE of 0.215 m
+- It is also notable that there is some confucion between flat surfaces with Wall/shelf
 
 # My experience with Kimera 
 
