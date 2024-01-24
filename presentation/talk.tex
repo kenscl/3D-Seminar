@@ -3,7 +3,7 @@
 \usepackage{animate}
 %Information to be included in the title page:
 \title{Kimera: an Open-Source Library for Real-Time
-Metric-Semantic Localization and Mapping}
+Metric-Semantic Localization and Mapping} 
 \author{Ken Schlesiger}
 \institute{Universität Würzburg}
 \date{25.01.2024}
@@ -32,15 +32,6 @@ Metric-Semantic Localization and Mapping}
 \frame[plain]{\titlepage}
 
 \begin{frame}
-\frametitle{What does Kimera do?}
-Three main Functions: 
-\begin{itemize}
-    \item Pose estimation (VIO) 
-    \item 3D mesh reconstruction
-    \item semantic mesh annotation
-\end{itemize}
-\end{frame}
-\begin{frame}
     \frametitle{Pose estimation and mesh reconstruction} 
     \begin{figure}[ht]
         \centering
@@ -55,13 +46,12 @@ Three main Functions:
     \end{figure}
 \end{frame}
 \begin{frame}
-\frametitle{The structure of Kimera}
-Kimera is split into four parts:
+\frametitle{What does Kimera \cite{rosinol2020kimera} do?}
+Three main Functions: 
 \begin{itemize}
-    \item Kimera-VIO
-    \item Kiemra-RPGO
-    \item Kimera-Mesher
-    \item Kimera-Semantics
+    \item Pose estimation (VIO) 
+    \item 3D mesh reconstruction
+    \item semantic mesh annotation
 \end{itemize}
 \end{frame}
 \begin{frame}
@@ -78,12 +68,15 @@ Kimera is split into four parts:
 \end{frame}
 \begin{frame}
     \frametitle{Kimera-VIO} 
-\begin{align*}
-    E(u,v) = \sum_{x} \sum_y w(x,y) [I(x+u,y+v)- I(x,y)]^2  
-\end{align*}
+    \begin{figure}[ht]
+        \centering
+        \animategraphics[width=0.6\linewidth,autoplay,loop]{0.25}{kimera_VIO_gif/kimeravio_ROS_mesh-}{0}{47}
+        \caption{Example of Corner Detection \cite{Shi_tomasi}}
+    \end{figure}
+Lucas Kanade \cite{lucas1981iterative} tracking:
 \begin{align*}
            \begin{bmatrix}
-               I_x (q_1) & I_x (q_1) \\ I_x (q_2) & I_x (q_2) \\  ... & ... \\I_x (q_n) & I_x (q_n)
+               I_x (q_1) & I_y (q_1) \\ I_x (q_2) & I_y (q_2) \\  ... & ... \\I_x (q_n) & I_y (q_n)
            \end{bmatrix} 
            \begin{bmatrix}
                u \\ v
@@ -131,12 +124,14 @@ Kimera is split into four parts:
 \begin{minipage}{0.49\textwidth}
     \begin{figure}
         \includegraphics[width=\textwidth]{480px-Delaunay_circumcircles_vectorial.svg.png} 
+        \caption{Delaunay Triangulation}
     \end{figure}
 \end{minipage}
 \begin{minipage}{0.49\textwidth}
     \begin{figure}[ht]
         \centering
         \animategraphics[width=\textwidth,autoplay,loop]{5}{kiemra_mesher_gif/kimeravio_release-}{0}{258}
+        \caption{An example of mesh generation}
     \end{figure}
 \end{minipage}
 \end{frame}
@@ -186,8 +181,12 @@ Kimera is split into four parts:
 \end{minipage}
 \begin{minipage}{0.49\textwidth}
 \begin{figure}
-    \includegraphics[width=\linewidth]{screenshot_2024-01-24-191114.png} 
-    \caption{Performance mesh reconstruction}
+    \includegraphics[width=\linewidth]{screenshot_2024-01-24-211538.png} 
+    \caption{Performance of mesh reconstruction}
+\end{figure}
+\begin{figure}
+    \includegraphics[width=\linewidth]{screenshot_2024-01-24-211639.png} 
+    \caption{Comparison of Point reconstruction to ground truth}
 \end{figure}
 \end{minipage}
 \end{frame}
@@ -195,7 +194,7 @@ Kimera is split into four parts:
 \footnotesize
   \frametitle{References}
   \bibliographystyle{plain}
-\bibliography{../paper}{}
+\bibliography{paper}{}
 \end{frame}
 
 \end{document}
