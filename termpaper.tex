@@ -108,10 +108,40 @@ This write up is split into 2 main parts.
 \end{itemize}
 For further details, the complete documentation and supplementary material can be found on the Kimera GitHub repository: \url{https://github.com/MIT-SPARK/Kimera}\\ A demonstration video is available on YouTube: \url{https://www.youtube.com/watch?v=-5XxXRABXJ}
 \section{Background} \label{Sec:background}
-This section is mainly split into parts: \emph{(i)} A historical overview over simmilar Libraries before Kimera, \emph{(ii)} A short overview over the work Kimera is based on, \emph{(iii)} The additions onto kimera since its release and \emph{(iv)} a general overview over Simillar libraries since the release of Kimera.
-\subsection*{\emph{(i)} A historical overview over simmilar Libraries}
-There are several libraries that enable a subset of the functions that Kimera can achive. 
-todo
+This section is mainly split into two parts: \emph{(i)} A historical overview over simmilar Libraries before Kimera, \emph{(ii)} a general overview over Simillar libraries since the release of Kimera.
+\subsection*{\emph{(i)} A historical overview over similar Libraries}
+Before the release of Kimera several Libraries with similar functionality have been released. 
+Many of these libraries do however differ significantly from Kimera.
+The approaches these libraries use are usually either liar or rgb-d camera based, simpler or unable to perform in real time. 
+Simpler approaches include Kalman-Filter based approaches, for example MSCKF based approaches like 
+\cite{MSCKF} or \cite{sun2018robust}. 
+
+
+Another library with the intention of providing a basis for VIO research is openVINS~\cite{Geneva2020ICRA} it focuses on the previously mentioned MSCKF as the core of its library. 
+
+
+
+
+Finally VINIS
+\subsection*{\emph{(ii)} An overview over similar Libraries since the release of Kimera}
+Since the release of Kimera in 2019 several libraries have been released that implement some of the features that Kimera supports.
+The most notable of these libraries is ORB-SLAM3~\cite{ORBSLAM3} which is a library for real time visual slam using monocular, stereo and RGB-D cameras. 
+While the general implementation of Orb-SLSM3 is distinct from that of Kimera it is notable that is able to consider all measured states while Kimera only considers those in a certain time frame. 
+Orb-SLSM3 is also able to create multiple local meshes and merge them to improve its performance.
+It however does not build a semantic mesh. 
+In a comparison between Kimera an Orb-SLAM3 the authors claim that Orb-SLAM3 is three two four times more accurate than Kimera and VINS-Fusion on the EuRoC dataset. 
+Another library that outperforms Kimera is OKVIS2 \cite{leutenegger2022okvis2} which leverages old marginalized states in its factor graph as well as a convolutional neural network to remove dynamic objects to significantly outperform Kimera in pose estimation. 
+
+It is notable that Kimera don't produce its own semantic labels. 
+A library which achieves this is \cite{murez2020atlas}.
+This approach to semantic segmentation uses back projected 2D semantic labels generated using a 2D Convolutional neural network, as well as a 3D CNN to predict a 3D model. 
+
+
+It is notable that none of the libraries, either released before or after Kimera include all of the features that Kimera implements,
+mainly both semantic segmentation as well as 3D metric semantic annotation.
+
+
+
  
 \section{Kimera} \label{Sec:kimera}
 \subsection{Structure}

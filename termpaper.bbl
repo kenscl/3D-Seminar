@@ -1,4 +1,11 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
+
+\bibitem{ORBSLAM3}
+Carlos Campos, Richard Elvira, Juan J.~Gómez Rodríguez, José~M. M.~Montiel,
+  and Juan D.~Tardós.
+\newblock Orb-slam3: An accurate open-source library for visual,
+  visual–inertial, and multimap slam.
+\newblock {\em IEEE Transactions on Robotics}, 37(6):1874--1890, 2021.
 
 \bibitem{gtsam}
 F.~Dellaert et~al.
@@ -16,29 +23,58 @@ Dorian G\'alvez-L\'opez and J.~D. Tard\'os.
 \newblock Bags of binary words for fast place recognition in image sequences.
 \newblock {\em IEEE Transactions on Robotics}, 28(5):1188--1197, October 2012.
 
+\bibitem{leutenegger2022okvis2}
+Stefan Leutenegger.
+\newblock Okvis2: Realtime scalable visual-inertial slam with loop closure,
+  2022.
+
 \bibitem{lucas1981iterative}
 Bruce~D Lucas and Takeo Kanade.
-\newblock An iterative image registration technique with an application to stereo vision.
-\newblock In {\em IJCAI'81: 7th international joint conference on Artificial intelligence}, volume~2, pages 674--679, 1981.
+\newblock An iterative image registration technique with an application to
+  stereo vision.
+\newblock In {\em IJCAI'81: 7th international joint conference on Artificial
+  intelligence}, volume~2, pages 674--679, 1981.
 
 \bibitem{preint_lupton}
 Todd Lupton and Salah Sukkarieh.
-\newblock Visual-inertial-aided navigation for high-dynamic motion in built environments without initial conditions.
+\newblock Visual-inertial-aided navigation for high-dynamic motion in built
+  environments without initial conditions.
 \newblock {\em IEEE Transactions on Robotics}, 28(1):61--76, 2012.
+
+\bibitem{MSCKF}
+Anastasios~I. Mourikis and Stergios~I. Roumeliotis.
+\newblock A multi-state constraint kalman filter for vision-aided inertial
+  navigation.
+\newblock In {\em Proceedings 2007 IEEE International Conference on Robotics
+  and Automation}, pages 3565--3572, 2007.
+
+\bibitem{murez2020atlas}
+Zak Murez, Tarrence van As, James Bartolozzi, Ayan Sinha, Vijay Badrinarayanan,
+  and Andrew Rabinovich.
+\newblock Atlas: End-to-end 3d scene reconstruction from posed images, 2020.
 
 \bibitem{rosinol2020kimera}
 Antoni Rosinol, Marcus Abate, Yun Chang, and Luca Carlone.
-\newblock Kimera: an open-source library for real-time metric-semantic localization and mapping, 2020.
+\newblock Kimera: an open-source library for real-time metric-semantic
+  localization and mapping, 2020.
 
 \bibitem{marchingCubesImage}
 Ryoshoru.
 \newblock Marching cubes cases.
-\newblock % \url{https://de.wikipedia.org/wiki/Datei:MarchingCubesEdit.svg#globalusage}.
+\newblock %
+  \url{https://de.wikipedia.org/wiki/Datei:MarchingCubesEdit.svg#globalusage}.
 \newblock Accessed: January 2,2024.
 
 \bibitem{Shi_tomasi}
 Jianbo Shi and Tomasi.
 \newblock Good features to track.
-\newblock In {\em 1994 Proceedings of IEEE Conference on Computer Vision and Pattern Recognition}, pages 593--600, 1994.
+\newblock In {\em 1994 Proceedings of IEEE Conference on Computer Vision and
+  Pattern Recognition}, pages 593--600, 1994.
+
+\bibitem{sun2018robust}
+Ke~Sun, Kartik Mohta, Bernd Pfrommer, Michael Watterson, Sikang Liu, Yash
+  Mulgaonkar, Camillo~J. Taylor, and Vijay Kumar.
+\newblock Robust stereo visual inertial odometry for fast autonomous flight,
+  2018.
 
 \end{thebibliography}
