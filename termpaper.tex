@@ -112,17 +112,13 @@ This section is mainly split into two parts: \emph{(i)} A historical overview ov
 \subsection*{\emph{(i)} A historical overview over similar Libraries}
 Before the release of Kimera several Libraries with similar functionality have been released. 
 Many of these libraries do however differ significantly from Kimera.
-The approaches these libraries use are usually either liar or rgb-d camera based, simpler or unable to perform in real time. 
+The approaches these libraries use are usually either lidar or rgb-d camera based, simpler or unable to perform in real time. 
 Simpler approaches include Kalman-Filter based approaches, for example MSCKF based approaches like 
 \cite{MSCKF} or \cite{sun2018robust}. 
-
-
+A library that combines many of these approaches is VINS-Fusion~\cite{qin2019b}, which allows for state estimation with botch Cameras and lidars, as well as GPS data alongside many other sensors in a optimization based state estimator. 
+According to \cite{ORBSLAM3} Kimera and VINS-Fusion perform similarly.
 Another library with the intention of providing a basis for VIO research is openVINS~\cite{Geneva2020ICRA} it focuses on the previously mentioned MSCKF as the core of its library. 
 
-
-
-
-Finally VINIS
 \subsection*{\emph{(ii)} An overview over similar Libraries since the release of Kimera}
 Since the release of Kimera in 2019 several libraries have been released that implement some of the features that Kimera supports.
 The most notable of these libraries is ORB-SLAM3~\cite{ORBSLAM3} which is a library for real time visual slam using monocular, stereo and RGB-D cameras. 

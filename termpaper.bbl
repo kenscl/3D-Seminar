@@ -23,6 +23,12 @@ Dorian G\'alvez-L\'opez and J.~D. Tard\'os.
 \newblock Bags of binary words for fast place recognition in image sequences.
 \newblock {\em IEEE Transactions on Robotics}, 28(5):1188--1197, October 2012.
 
+\bibitem{Geneva2020ICRA}
+Patrick Geneva, Kevin Eckenhoff, Woosik Lee, Yulin Yang, and Guoquan Huang.
+\newblock {OpenVINS}: A research platform for visual-inertial estimation.
+\newblock In {\em Proc. of the IEEE International Conference on Robotics and
+  Automation}, Paris, France, 2020.
+
 \bibitem{leutenegger2022okvis2}
 Stefan Leutenegger.
 \newblock Okvis2: Realtime scalable visual-inertial slam with loop closure,
@@ -52,6 +58,11 @@ Anastasios~I. Mourikis and Stergios~I. Roumeliotis.
 Zak Murez, Tarrence van As, James Bartolozzi, Ayan Sinha, Vijay Badrinarayanan,
   and Andrew Rabinovich.
 \newblock Atlas: End-to-end 3d scene reconstruction from posed images, 2020.
+
+\bibitem{qin2019b}
+Tong Qin, Shaozu Cao, Jie Pan, and Shaojie Shen.
+\newblock A general optimization-based framework for global pose estimation
+  with multiple sensors, 2019.
 
 \bibitem{rosinol2020kimera}
 Antoni Rosinol, Marcus Abate, Yun Chang, and Luca Carlone.
