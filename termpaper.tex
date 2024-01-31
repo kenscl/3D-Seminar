@@ -29,7 +29,7 @@
 
 \hypersetup{
     colorlinks=true,
-    linkcolor=Grey,
+    linkcolor=Red,
     urlcolor=blue,
     citecolor=black,
 }
@@ -194,14 +194,14 @@ Therefore instead of solving for u and v analytically the equivalent least squar
 
 \subsubsection{Smoothing based state estimation} \label{Pre:Smoothing}
 There exist two main smoothing approaches in the field of VIO, Fixed-Lag and full smoothing.
-In Full smoothing all recorded optimizes all state-measurements, while Fixed-Lag smoothing marginalizes out all states and only considers those in a certain time frame.
+Full-smoothing based approaches smooth over all state-measurements, while Fixed-Lag smoothing marginalizes out all old states and therefore only considers those in a certain time frame.
 The general Approach is otherwise similar: It begins with estimating the state in the relevant Time frame.
 The optimisation is done by comparing the measured IMU and visual data with a state prediction by using a cost function. 
-The goal of the optimisation is to minimize this cost function at all points in time to get a trajectory that best fits reality.
+The goal of the optimisation is to minimize this cost function at all points in time to get a trajectory that best fits the measurements.
 
 \subsubsection{Random sample consensus} \label{sec:RANSAC}
-RANSAC is a method that randomly selects n points and fits a function through them.
-The distances of each point to the straight are then determined.
+RANSAC is a method that randomly selects n points and fits a model through them.
+The distances of each point to the model are then determined. 
 A score is then calculated by counting the number of points which support this model.
 This process is repeated several times or until all possible combinations of n points have been considered. 
 The function with the largest highest score is then selected as the best fit.
@@ -213,11 +213,10 @@ While approaches based on filtering (e.g. Observationally constraint EKF, iterat
 Therefore Kimera employs Fixed-Lag smoothing (see sec.~\ref{Pre:Smoothing}) based state estimation in form of  a modified version of the On-Manifold Preintegration (see sec.~\ref{pre:on-manifold}) algorithm presented in \cite{Forster_2017} which computes a maximum a posteriori estimate in real time. 
 This paper improves on the runtime constraints of usual VIO approaches by preintigrating the inertial measurements between keyframes into a single motion. 
 This means that certain quantities will be computed between keyframes reducing the amount of variables that need to be optimized. 
-Kimera expands on this to use both monocular and stereo cameras instead of only monocular cameras and also to allow both full lag and fixed lag smoothing , though fixed lag smoothing is used preferentially to limit the time the algorithm takes.
-Fixed lag smoothing denotes the marginalisation of measurements outside of a certain time window, while full lag smoothing estimates the state over all measurements.
+Kimera expands on this to use both monocular and stereo cameras instead of only monocular cameras and also to allow both full lag and fixed lag smoothing, though fixed lag smoothing is used preferentially to limit the time the algorithm takes.
 
 Kimera-VIO is split into two parts: \textit{(i)} The front-end and \textit{(ii)} the back-end. 
-The front end is responsible for feature tracking, preintigration of measurements and state estimation, while the back-end is responsible for improving the state estimation. 
+The front end is responsible for feature tracking, preintigration of measurements between keyframes, while the back-end is responsible for the state estimation using the fixed lag smoother. 
 \subsubsection*{\textit{(i)} The front-end}\label{para:geometric verification} 
 
 The Kimera-VIO front-end is split between the IMU based front-end and the vision based front-end.
@@ -230,7 +229,7 @@ Kimera performs this geometric verification on both monocular vision using 5-poi
 Kimera also offers the ability to verify the IMU data using mono and stereo verification using 2 and 1-point RANSAC respectively.
 
 \subsubsection*{\textit{(ii)} The back-end}
-The VIO back-end uses the preintegrated IMU and a structureless \footnote{In this context structureless means that the Positions of landmarks (tracked features) are ignored by the fixed lag smoother} visual model similar to \cite{Forster_2017} and adds them to a fixed lag smoother, in this case a factor graph. 
+The VIO back-end uses the preintegrated IMU measurements and a structureless \footnote{In this context structureless means that the Positions of landmarks (tracked features) are ignored by the fixed lag smoother} visual model similar to \cite{Forster_2017} and adds them to a fixed lag smoother, in this case a factor graph. 
 iSAM2 implemented in the GTSAM library is then used to solve the factor graph. 
 iSAM2 is a incremental soothing technique which uses factor graphs to reduce the number of variables full smoothing approaches inherently have to compute. 
 After each iSAM2 computation produces the newly refined state estimate the 3D-positions of features tracked by the VIO front-end are estimated.
@@ -244,76 +243,80 @@ The last step of the VIO back-end algorithm is the marginalisation of all states
 
 
 \subsection{Kimera-Mesher}
-Sec.\ref{pre:delaunay} to ? are meant to explain important topics to Kimera-VIO.
+Sec.\ref{pre:delaunay} is meant to explain important topics to Kimera-VIO.
 Sec.\ref{Sec:K-Mesher overview} explains the inner workings of Kimera-VIO.
 \subsubsection{Delaunay Triangulation} \label{pre:delaunay}
-This is a method for triangulating a number of points. This means that a mesh gets generated that connects the points.
-This is done by drawing ovals of the points. 
-These ovals are chosen in such a manner that every circle has exactly three points\footnote{This only applies in 2D in higher dimensional spaces this number can be bigger} within its shape. 
-These three points are then connected.  
-\subsubsection{Overview} \label{Sec:K-Mesher overview}
-The Kimera-Mesher produces two kinds of 3D mesh: \textit{(i)} a per-frame mesh and \textit{(ii)} a multi-frame mesh. The per-frame mesh is generated every frame from the stereo camera input, while the multi-frame mesh is generated from the per-frame mesh.
-Kimera-Mesher also has optional 2D fast local metric-semantic reconstruction to texture the mesh produced by the per-frame mesher.
-\paragraph{\textit{(i)} The per-frame mesh}
-The points that Kimera-VIO front-end produces in the current key frame are triangulated (see ~\ref{pre:delaunay}).
-This triangulation is then projected onto the results of the Kimera-VIO back-end. This results in a 3D mesh. 
+Delauny Triangulation is a method used for creating 2D-Meshes\footnote{These meshes can also be generated in higher dimensional spaces, however Kiemra only uses the 2D case.} over a set of points.
+This is done by selecting ovals in such a manner that each oval contains exactly three points within its area.
+Each point should also lie on the edge of one of the ovals.
+When these criteria are met all the points belonging to one oval are connected.
+This process them forms a 2D-Mesh.
 
-\paragraph{\textit{(ii)} The multi-frame mesh}
-The multi-frame mesh is constructed from the output of the per-frame mesh.
-To do this only the per-frame meshes are considered which have fallen out of view.
-The multi-frame mesher determines which edges and vertices aren't jet contained in the multi frame mesh and adds them to it accordingly. 
-The positions of all vertices are then updated with the position estimates produced by the Kimera-VIO back-end.
-Next old features vertices that have fallen behind the VIO time horizon get removed. 
-This leads to objects which have moved being removed from the data. 
-(todo mayby planar surfaces?)
+\subsubsection{Overview} \label{Sec:K-Mesher overview}
+The Kimera-Mesher produces two kinds of 3D mesh: 
+First per-frame mesh and second a multi-frame mesh.
+The per-frame mesh is generated every frame from the stereo camera input, while the multi-frame mesh is generated from the per-frame mesh.
+The per-frame mesh is generated from the points that Kimera-VIO front-end tracks in the current key frame. 
+To generate the per-frame mesh first these points are triangulated in 2D (see ~\ref{pre:delaunay}).
+This triangulation is then projected onto the results of the Kimera-VIO back-end. This results in a 3D mesh. 
+The multi-frame mesh is then constructed from the output of the per-frame mesh.
+To achieve this Kimera-Mesher determines which edges and vertices of the per-frame mesh aren't jet contained in the multi frame mesh and adds them to it accordingly. 
+The positions of all vertices are then updated with new position estimates produced by the Kimera-VIO back-end.
+Next vertices that have fallen behind the VIO time horizon get removed. 
+Finally when planar structures are detected regularity factors are added to the multi frame mesh to improve mesh quality.
 
 \subsection{Kimera-RPGO}
 
 \subsubsection{Incremental Consistent Measurement Set Maximization} \label{pre:PCM}
 Incremental Consistent Measurement Set Maximization is a  method of detecting loop closures in multi robot SLAM applications. 
 
-It takes a set of putative loop closures as input and tries to filter out all inconsistent loop closures. 
-This is done by finding pairs of measurements that are with each other i.e. finding multiple measurements that seem probable. 
+It takes a set of putative loop closures as input and tries to filter out all pairwise inconsistent loop closures. 
+This is done by finding pairs of measurements that support each other. 
 A maximum subset of these consistent measurements is then selected as the proper trajectory.
 This is efficiently solved by converting the problem into a Maximum Clique problem over a consistency graph. 
 A Maximum Clique problem looks for the largest subset of vertices where all vertices have edges between them. 
 A consistency graph is defined as a graph where each vertex represents a measurement and each edge denotes a consistency.
-In this context consistency refers to how similar two measurements are.
+This consistency is determined by use of a consistency metric, for example the Mahalanobis distance.
+This is then represented by use of a adjacency matrix.
+The values in the matrix represent the values determined by the consistency metric. 
+\subsubsection{Gauß-Newton} \label{pre:Gauß-netwon}
+Gauss newton is a method for solving non linear least square problems. 
+As such it is a iterative optimisation technique that seeks to minimize the sum of squared differences between observed and predicted values.
+This is achieved by linearising the model using a Jacobian and solving the linearised least squares problem at each iteration.
 \subsubsection {Overview}
 Kimera-RPGO is split between two parts: \textit{(i)} a loop closure detection algorithm and \textit{(ii)} a Pose Graph optimisation module that calculates a globally consistent pose.
 
-\subsubsection{Gauß-Newton}
 
-\paragraph{\textit{(i)} Loop closure detection}
-is the detection of areas that the robot has previously visited.
-This is done so errors in the estimated map and pose can accumulate over time resulting in a offset.
+\subsubsection*{\textit{(i)} Loop closure detection}
+Loop closure detection denotes the detection of areas that the robot has previously visited.
+This is done as errors in the estimated map and pose can accumulate over time resulting in a offset.
 If loop closures are detected then these offsets can be corrected. 
-Kimera-RPGO detects putative~\footnote{putative loop closures are candidates for loop closures.} loop closures by a bag of words representation and the use of DBoW2~\cite{dbow2} . 
+Kimera-RPGO detects putative~\footnote{putative loop closures are candidates for loop closures.} loop closures by a bag of words representation using DBoW2~\cite{dbow2} . 
 A bag of words representation is a set that usually contains a histogram which groups visual words together. 
 A visual word is created by grouping similar visual features in the observed environment together.
-Common features include keypoints and descriptors, which capture the unique characteristics of different parts of an image. 
 If two of these bags of words are significantly similar a putative loop closure is detected. 
 
-Kimera-RPGO then verifies loop closures using mono and stereo geometric verification similar to \ref{para:geometric verification}\textit{(i)}. This set can however still contain outliers for example through similar rooms in a building.
+Kimera-RPGO then verifies loop closures using mono and stereo geometric verification similar to \ref{para:geometric verification}\textit{(i)}. This set can however still contain outliers, these may be caused by similar locations.
 The remaining loop closures are then passed to the robust PGO-solver.
 
-\paragraph{\textit{(ii)} Robust PGO-solver} uses a modified version of \textit{Consistent measurement Set Maximization} (see \ref{pre:PCM}) (PCM). PCM has been modified to not only work on a single robot, but also in a real time (online) use case.
+\subsubsection*{\textit{(ii)} Robust PGO-solver} 
+The Kimera-RPGO Pose graph optimizer uses a modified version of \textit{Consistent measurement Set Maximization} (see \ref{pre:PCM}) (PCM). PCM has been modified to not only work on a single robot, but also in a real time (online) use case.
 PCM has been further modified to also check its output using 1.Odometry and 2.Comparing previous loop closures to the newly detected one. 
 In 1. outliers are detected by comparing odometry and PCM. 
 If the PCM is a outlier it should differ from the odometry by a larger difference than that off measurement noise\footnote{Anomalous odometry outliers are filtered out through a Chi-squared test.}. After this the loop closures are compared to previous ones. 
 Kimera-RPGO also differs in how it builds its adjacency Matrix $\M{A}$.
 While PCM builds a new $\M{A}$ every time a loop closure is detected, Kimera-RPGO adds new rows and columns to its adjacency matrix each time a new loop closure is detected. This ensures the performance constraints needed for real time operation.
-Finally the largest subset is determined using a maximum clique algorithm (see \ref{pre:PCM}) and the results added to the pose graph after some optimisation using the Gauß-Newton algorithm.
+Finally the largest subset is determined using a maximum clique algorithm (see \ref{pre:PCM}) and the results added to the pose graph after some optimisation using the Gauß-Newton method (see \ref{pre:Gauß-netwon}).
 
 \subsection{Kimera-Semantics}
 \subsubsection{Semi-global matching} \label{pre:semi-global matching}
-Semi-global matching is a method used  to compute the correspondences between pixels in a stereo image. 
+Semi-global matching is a method used  to compute the correspondences between pixels in a pair of stereo images. 
 This then yields a disparity image between the two images. 
 A disparity image is a image which describes the apparent motion\footnote{An example of apparent motion would be the perceived jump in the position of ones thumb when covering ones eye.} between the images.
 The disparity image is calculated by finding pixels with similar intensity in the stereo pair. 
 This does however result in many erroneous matches for each pixel. 
 To prevent this a regularisation factor is used which penalises jumps in the disparity between adjacent pixels.
-\subsubsection{Truncated singed distance function (TSDF)} \label{pre:TSDF}
+\subsubsection{Truncated singed distance function (field) (TSDF)} \label{pre:TSDF}
 A signed distance function describes the distance of points in space to the nearest surface.
 If the point is outside of the object its sing is positive.
 If the point is inside the object the sing is negative. 
@@ -326,45 +329,42 @@ In this context truncation means that we only consider points with a certain max
   \caption{The 15 basic shapes of marching cubes (source~\cite{marchingCubesImage})}\label{Fig:Marching cubes}  
 \end{figure}
 Marching cubes is a algorithm that approximates a 3D mesh from a voxel grid. 
-A voxel grid is a list of intensities that can be reconstructed to a Volume filled with 3D points with a certain intensity. 
-Every corner gets its own index.
-If a Corner is active (i.e. on the inside of a object or in other words its intensity is positive\footnote{the sings of the TSDF are flipped}) its connecting edges form a triangle. 
-This leads to $2^8$ different configurations with 15 unique cases\footnote{The missing cases are all symmetries of the 15 cases.} as seen in \ref{Fig:Marching cubes}.
+A voxel grid is a list of values regularly spaced through the volume. 
+Marching then "marches" a "cube" consisting of eight  points adjacent to each other.
+A point is called active if the value of a corresponding voxel is above a certain threshold.
+If one of these pints is active is active its connecting edges form a triangle. 
+If not just one of these points is active then these shapes become more complex leading to $2^8$ different configurations with 15 unique cases\footnote{The missing cases are all symmetries of the 15 cases.} as seen in \ref{Fig:Marching cubes}.
 
 Marching cubes loops over the voxel grid and creates the boxes filled with one of the $2^8$ shapes according to the values of the voxels.
 
 \subsubsection{Overview}
-Kimera semantics serves two main functions: \textit{(i)} Building a accurate 3D-Mesh and  \textit{(ii)} semantically annotating that mesh.
-If label are provided these two steps will occur at the same time.  
-If no labels are provided then only the 3D-mesh will be build as semantic annotation is not possibe.
-The user of Kimera-Semantics also has to provide their own label generation. 
+Kimera semantics serves two main functions: \textit{(i)} Building an accurate 3D-Mesh and  \textit{(ii)} semantically annotating that mesh.
+If no labels are provided then only the 3D-mesh will be build as semantic annotation is not possible.
+The user of Kimera-Semantics has to provide their own labels as Kimera-Semantics dost generate the labels. 
 According to a comment by one of the contributors when asked about appropriate models on the GitHub of Kimera-Semantics any "any that outputs semantic labels on a per-pixel basis will do".
+
 Kimera-Semantics doesn't use the mesh created by Kimera-Mesher. 
 This is due to higher level tasks requiring a more accurate 3D-mesh than those required by low level tasks like obstacle avoidance.
-\paragraph{3D mesh generation and annotation}
-is done in Kimera Semantics by producing 3D meshes using semi-global matching (see \ref{pre:semi-global matching}) by leveraging information about the camera position and geometry and triangulating the corresponding 3D positions.
+\subsubsection*{3D mesh generation and annotation}
+3D mesh generation an annotation is achieved in Kimera Semantics by the use of semi-global matching (see \ref{pre:semi-global matching}) by leveraging information about the camera position and geometry and triangulating the corresponding 3D positions.
 The provided labels are attached to the generated 3D-Point cloud. 
 Voxblox is then used to create a TSDF (see \ref{pre:TSDF}) using grouped ray casting.
 In voxbloxes grouped ray casting each point is mapped to the nearest voxel on the voxel grid. 
-The mean of all positions and colors is then taken and a ray cast to this mean. 
-The probabilities of the labels are simultaneously generated. 
-This happens by counting the number of label occurrences and normalizing that list. 
+The mean of all positions is then taken and a ray cast to this mean. 
+The probabilities of the labels are simultaneously generated by counting the occurrences of each label. 
 While the ray travels through the voxel grid the probabilities of the labels are updated accordingly, by Bayesian updates. 
-This means that at every voxel the likelihood matrix containing the label likelihood is multiplied with the measurement frequency and added to the prior measurements. 
-The result is then renormalized. 
-The TSDF then gets constructed from the distances of the voxels to the surface. (todo stimmt das?)
-The label attached to each voxel is then most likly label in that voxel.
 Finally the marching cubes algorithm is used to extract a 3D-mesh with the labels.
 
 \subsection{Performance}
-To allow the Kimera Modules to run independently Kimera uses four Threads. This is required due to the differing run time requirements of the different components.
+To allow the Kimera Modules to run independently Kimera uses four Threads. 
+This is required due to the differing run time requirements of the different components.
 The authors measured the preintegrating part to have a runtime of 40µs while the visual feature tracking takes a lot longer at an average of around 4.5 ms with a maximum of more than 60ms.
 This allows the front-end to estimate the position at over 200Hz.
-The VIO back-end runs slower at a mean runtime of 45ms, most of this time is the solving of factor graphs at 40ms. 
+The VIO back-end runs slower at a mean runtime of 45ms, most of this time is consumed by solving the factor graphs at a runtime of 40ms. 
 It is notable that the time for feature tracking at each frame is significantly shorter than the Feature detection, stereo matching,
 and geometric verification executed at each keyframe as seen in \ref{Fig:Timings}.
-The Kimera-Mesher generates the per-frame mesh at below 5ms and the multi-frame at below 15ms leading to a total run time of under 20ms.
-Due to Kimera-RPGO and Kimera-Semantics usually not being time critical for real time systems, as they would be used for higher level tasks like path planning, they run on slower threads then Kimera-VIO and Kimera-Mesher which are necessary for vital processes like obsticale avoidance.
+Kimera-Mesher generates the per-frame mesh at below 5ms and the multi-frame at below 15ms leading to a total run time of under 20ms.
+Due to Kimera-RPGO and Kimera-Semantics usually not being time critical for real time systems, as they would be used for higher level tasks like path planning, they run on slower threads then Kimera-VIO and Kimera-Mesher which are necessary for vital processes like obstacle avoidance.
 Kimera-RPGO has a measured runtime of less then 55ms.
 The longest runtime is that of Kimera-Semantics at an average of 100ms at each keyframe. 
 Kimera-VIO runs on the first two threads, with its front-end running on the first thread.
@@ -384,16 +384,15 @@ On the reaming two datasets Kimera measured second best.
 In full smoothing Kimera outperformed GTSAM 6 times while being tied twice. 
 It is also notable that GTSAM failed completely three times while Kimera was able to run all tests.
 In PGO Kimera outperformed VINS-LC 9 out of 11 times. 
-It is also Notable that Kimera-VIO incurs a small drift of below 0.2 $\%$ in longer trajectories. 
+It is also notable that Kimera-VIO incurs a small drift of below 0.2 $\%$ on longer trajectories. 
 The authors also measured the impact of the tunable parameter of Kimera-RPGO and found that it only impacts the performance of Kimera by a negligible amount when using PCM.
 They measured a RMSE of 0.05 m at a $\alpha$ of 10 and a RMSE of 0.49 m at a $\alpha$ of 0.001, when using. 
 Without the use of PCM the error increases to a maximum of 1.59 m at a $\alpha$ of 0.001. 
 To evaluate the performance of Kimera-Mesher testing on six sequences in the EuRoC V1 and V2 datasets was done. 
 The performance of both the Multi-frame mesh as well as the global mesh was determined. 
 The Multi-frame mesh hat a RMSE of 0.374 m and 0.530 m, while the error of the Global mesh was between 0.353 m and 0.480 m.
-The Global Mesh outperformed the Mult-frame mesh in four out of the six tests, ranging from 12 \% to 24 \% lower RMSE.
+The Global Mesh outperformed the Multi-frame mesh in four out of the six tests, ranging from 12 \% to 24 \% lower RMSE.
 In the cases where the multi-frame mesh was more accurate the difference was less than 3 \%.
-(todo mayby completness?)
 The testing of Kimera-Semantics was done using a unity based simulator. 
 The authors noticed small geometric and semantic errors with bundled raycasting, while dense stereo introduces notable errors, especially in texture-less areas like walls. 
 Using ground truth depth and pose information provided by the simulator a semantic accuracy of 94.68 \% was achieved, with a geometric RMSE of 0.079 m.
