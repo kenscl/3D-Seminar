@@ -149,14 +149,13 @@ Due to Kimeras Lightweight design, being able to run on only a CPU, each module 
 \ref{Sec:K-VIO overview} explains the inner workings of Kimera-VIO.
 
 \subsubsection{On-manifold Preintegration} \label{pre:on-manifold}
-In theory the IMU measurements can be integrated between time $t_i$ and $t_j$.
+In theory the IMU measurements can be integrated between time $t_i$ and $t_j$ to obtain relative measurements between keyframes.
 Problems do however arise in the context of optimisation based state estimation. 
 Here the state of the system at time $t_i$ is unknown and changes as more data points become available during successive steps of optimisation.
 T. Lupton and S. Sukkarieh \cite{preint_lupton} propose the use of pseudo measurements independent from the instal conditions which only describe the motion between measurements.
 Forster \textit{et al.} \cite{Forster_2017} improve on this by providing a more mathematically rigorous approach that avoids the problem of singularities caused by the use of euler-angles. 
 Their approach also generates a factor graph allowing for the use of incremental smoothing algorithms. 
 They also use a structureless model which reduces the computational load while retaining accuracy.
-todo rewrite section
 
 \subsubsection{Shi-Tomashi Corners} \label{Sec:Shi-Tomashi}
 Corners denote areas where a slight shift in location leads to a large change in pixel value. 
@@ -428,7 +427,7 @@ When testing Kimera-Semantics with the provided rosbag Kiemera-Semantics seemed 
 Kimera-VIO and by extension Kimera-RPGO and Kimera-Mesher are able to be run in three main ways. 
 The first is compiling all the packages from source. 
 The second way is through the use of a docker container and third way is by using ROS.
-While Kimera-VIO was able to run through docker without any problems~\footnote{As far as i am aware the is no graphical output} running Kimera using ROS already failed during compilation. 
+While Kimera-VIO was able to run through docker without any problems~\footnote{As far as i am aware there is no graphical output} running Kimera using ROS already failed during compilation. 
 This seems to be due to using the development branch of GTSAM. 
 After finding versions of GTSAM, Kimera-VIO could compile with Kimera-VIO, still does not behave properly. 
 The Kimera-VIO front-end ROS node seems to die after a minute of use.
